@@ -2,7 +2,7 @@
 
 # C Programming Language
 
-This is my simple and small documentation on c. I create this documentation on ansi standard c programming language.
+This is my simple and small documentation on c for me. I create this documentation on ansi standard c programming language.
 
 ## **_Table of Content_**
 
@@ -24,6 +24,9 @@ This is my simple and small documentation on c. I create this documentation on a
 - [String](#String)
 - [Custom Data Type](#Custom_Data_Type)
   - [structure](#structure)
+  - [union](#union)
+  - [enumeration](#enumeration)
+  - [typedef](#typedef)
 
 # Starting-With-C
 
@@ -225,7 +228,7 @@ there are six type of operator in c.
 | \<<=     | left shift and assign   |
 | \>>=     | right shift and assign  |
 
-## Selectin Operators
+## Selection Operators
 
 | operator | name         |
 | -------- | ------------ |
@@ -966,4 +969,568 @@ void printPerson(struct Person person){
     printf("Birth Date : %d/%d/%d\n",person.birth.date,person.birth.month,person.birth.year);
     printf("===> Finish Details <===\n");
 }
+```
+
+### Array of Structure
+
+Basic structure
+
+    struct structure_name array_name[size];
+
+Example :
+
+```c
+#include <stdio.h>
+#include <string.h>
+
+// create structure
+struct Person {
+    char name[30];
+    int age;
+};
+
+// function prototype
+void hello(struct Person);
+
+int main(void){
+    int number_of_person;
+
+    printf("How many person you create ? = ");
+    scanf("%d",&number_of_person);
+
+    // create person_array
+    struct Person list_of_person[number_of_person];
+
+
+    // create person
+    for(int i = 0; i < number_of_person; i++){
+        // input person details
+        struct Person person;
+        char name[30];
+        int age;
+
+        printf("\n===> Input Details Of Person %d <===\n",i+1);
+        printf("Name = ");
+        scanf("%s",name);
+        printf("Age = ");
+        scanf("%d",&age);
+
+        // create person
+        strcpy(person.name,name);
+        person.age = age;
+
+        // push in list_of_person
+        list_of_person[i] = person;
+    }
+
+    // hello all person
+    printf("\n\n===> Greeting <===\n");
+
+    for(int i = 0; i < number_of_person; i++){
+        // hello person
+        hello(list_of_person[i]);
+    }
+
+    printf("\n\n");
+    return 0;
+}
+
+// hello function
+void hello(struct Person person){
+    printf("\n==> Hello! %d year old %s!\n\n",person.age,person.name);
+}
+```
+
+### Structure Pointer
+
+Basic of structure pointer
+
+    struct Structure * pointer_name;
+    pointer_name = &structure_variable;
+
+    // access member from struct pointer
+    pointer_name->member;
+
+    // member notation
+    (*pointer_name).member;
+
+**_Example_**
+
+```c
+#include <stdio.h>
+#include <string.h>
+
+// create person structure
+struct Person {
+    char name[30];
+    int roll;
+};
+
+int main(void){
+    // create struct variable
+    struct Person tazri;
+    strcpy(tazri.name,"Md Tazri");
+    tazri.roll = 20;
+
+    // person pointer
+    struct Person * person_pointer;
+    person_pointer = &tazri;
+
+    // change variable by strucuter pointer
+    person_pointer->roll = 10;
+
+    printf("===> Print Details <===\n");
+    printf("person_pointer->name = %s\n",person_pointer->name);
+    printf("person_pointer->roll = %d\n",person_pointer->roll);
+    printf("(*person_pointer).roll = %d\n",(*person_pointer).roll);
+
+    printf("\n\n");
+
+    return 0;
+}
+```
+
+### structure return
+
+Basic structure of function which are return structure.
+
+    structure type funciton_name(perameter){
+        - - - - - - - -
+        - - - - - - - -
+        return structure
+    }
+
+Not only structure but also structure ponter.
+
+    structure type * function_name(perameter){
+        - - - - - - - -
+        - - - - - - - -
+        return &structure
+    }
+
+Example :
+
+```c
+#include <stdio.h>
+#include <string.h>
+
+// create structure
+struct Person {
+    char name[20];
+    int roll;
+};
+
+// function prototype
+struct Person add_hello(struct Person);
+struct Person * add_hi(struct Person *);
+
+int main(void){
+    // create a person
+    struct Person tazri;
+
+    // define value
+    strcpy(tazri.name,"Tazri");
+    tazri.roll = 21;
+
+    // print tazri
+    printf("\n===> Tazri <===\n");
+    printf("Name : %s\n",tazri.name);
+    printf("roll : %d\n",tazri.roll);
+
+    // use add_hello function
+    struct Person add_hello_tazri = add_hello(tazri);
+
+    // print hello world
+    printf("\n===> add_hello_tazri <===\n");
+    printf("add_hello_tazri.name = %s\n",add_hello_tazri.name);
+    printf("add_hello_tazri.roll = %d\n",add_hello_tazri.roll);
+
+    // print tazri
+    printf("\n===> Tazri <===\n");
+    printf("Name : %s\n",tazri.name);
+    printf("roll : %d\n",tazri.roll);
+
+    // use add_hi funciton
+    struct Person * hi_return_value = add_hi(&tazri);
+
+    printf("\n===> hi_return_value <====\n");
+    printf("hi_return_value->name = %s\n",hi_return_value->name);
+    printf("hi_return_value->roll = %d\n",hi_return_value->roll);
+
+    // print tazri
+    printf("\n===> Tazri <===\n");
+    printf("Name : %s\n",tazri.name);
+    printf("roll : %d\n",tazri.roll);
+
+    printf("\n\n");
+    return 0;
+}
+
+// add_hello
+struct Person add_hello(struct Person person){
+    char name[20] = "Hello, ";
+
+    strcat(name,person.name);
+    strcpy(person.name,name);
+
+    return person;
+}
+
+// add_hi
+struct Person * add_hi(struct Person *person){
+    char name[20] = "(pointer) Hi, ";
+    strcat(name,person->name);
+    strcpy(person->name,name);
+
+    return person;
+}
+```
+
+### Self Referential Structure
+
+Basic structure
+
+    struct structure_name{
+        memebers....;
+        ...... ;
+        .......;
+        struct structure_name * name;
+    }
+
+**_Example :_**
+
+```c
+#include <stdio.h>
+#include <string.h>
+
+// create simple node type structure
+struct node_type_struct{
+    char type[10];
+    int x;
+    int y;
+    struct node_type_struct * next;
+};
+
+// print part
+void print_part(struct node_type_struct *);
+
+int main(void){
+    // create head, body and tail structure
+    struct node_type_struct head, body, tail;
+
+    // head
+    head.x = 10;
+    head.y = 10;
+    head.next = &body;
+    strcpy(head.type,"Head");
+
+    // body
+    body.x = 50;
+    body.y = 50;
+    body.next = &tail;
+    strcpy(body.type,"Body");
+
+    // tail
+    tail.x = 100;
+    tail.y = 100;
+    tail.next = &head;
+    strcpy(tail.type,"Tail");
+
+    // print head
+    print_part(&head);
+    print_part(head.next);
+    print_part(head.next->next);
+
+    // change head value
+    head.next->next->next->x = 3000;
+    print_part(head.next->next->next);
+
+    printf("\n");
+    return 0;
+}
+
+// print_part
+void print_part(struct node_type_struct * part){
+    printf("\n===> Print %s <===\n",part->type);
+    printf("Name : %s\n",part->type);
+    printf("Position X : %d\n",part->x);
+    printf("Position Y : %d\n",part->y);
+    printf("===> Finish <===\n");
+    printf("\n");
+}
+```
+
+# Union
+
+It look like structure just it share only large member size with other or nothing else and also it declere system is little bit different. use "union" keyword instead of "structure" keyword.
+
+**_Example :_**
+
+```c
+#include <stdio.h>
+#include <string.h>
+
+union Create_union{
+    int position;
+    char name[20];
+};
+
+// funciton prototype
+void print_union(char * name,union Create_union);
+void print_union_pointer(union Create_union *);
+
+int main(void){
+    // create union variable and pointer
+    union Create_union one,two;
+    union Create_union * union_pointer;
+
+    // one
+    strcpy(one.name,"Position X");
+    one.position = 10;
+
+    // two
+    strcpy(two.name,"Position Y");
+    two.position = 20;
+
+    // point one
+    union_pointer = &one;
+
+    print_union("One",one);
+    print_union("Two",two);
+
+    strcpy(one.name,"Position one X");
+    print_union("One",one);
+
+    print_union_pointer(union_pointer);
+
+}
+
+// print union
+void print_union(char * name,union Create_union sample){
+    printf("\n===> print %s <===\n",name);
+    printf("Name : %s\n",sample.name);
+    printf("Position : %d\n",sample.position);
+    printf("===> Finish <===\n");
+}
+
+// print_union_pointer
+void print_union_pointer(union Create_union * sample){
+    printf("\n===> print Pointer <===\n");
+    printf("Name : %s\n",sample->name);
+    printf("Position : %d\n",sample->position);
+    printf("===> Finish <===\n");
+}
+```
+
+**_Result :_**
+
+    ===> print One <===
+    Name :
+
+    Position : 10
+    ===> Finish <===
+
+    ===> print Two <===
+    Name :
+    Position : 20
+    ===> Finish <===
+
+    ===> print One <===
+    Name : Position one X
+    Position : 1769172816
+    ===> Finish <===
+
+    ===> print Pointer <===
+    Name : Position one X
+    Position : 1769172816
+    ===> Finish <===
+
+# enumeration
+
+Basic structure of enumeration :
+
+    enum tag {
+        enumeration list or
+        enum memeber (s);
+    };
+
+Declare enum variable:
+
+    enum tag_name variable_name,variable_name_one;
+
+Define enum variable value:
+
+    enum_variable = enum_value;
+
+**_Example of enumeration:_**
+
+```c
+#include <stdio.h>
+#include <string.h>
+
+// create enum type data
+enum bool {false,true};
+
+int main(void){
+    enum bool is_hot_day;
+
+    is_hot_day = true;
+
+    if(is_hot_day){
+        printf("===> Is hot day = true\n");
+    }else{
+        printf("===> Is hot day = false\n");
+    }
+
+    printf("\n===> print true and false value <=== \n");
+    printf("true = %d\n",true);
+    printf("false = %d\n",false);
+
+    printf("\n");
+    return 0;
+}
+```
+
+**_Result :_**
+
+    ===> Is hot day = true
+
+    ===> print true and false value <===
+    true = 1
+    false = 0
+
+# define enumeratin member value
+
+Define enum memeber value :
+
+    enum tag_name {
+        memeber = value,
+        memeber_one = value
+        - - - - - - - -
+    }
+
+**_Example :_**
+
+```c
+#include <stdio.h>
+
+enum month {
+    Sep = 9,Oct,Nov,Dec,Jan=1,Feb,Mar,Apr
+};
+
+int main(void){
+    enum month this_month = Oct;
+    enum month next_month = Feb;
+    int number = Oct;
+
+    printf("This month %d\n",this_month);
+    printf("Next month %d\n",next_month);
+    printf("number = %d\n",number);
+
+    printf("\n\n");
+    return 0;
+}
+```
+
+**_Result :_**
+
+```
+This month 10
+Next month 2
+number = 10
+
+```
+
+**_Note :_** If enum 2 memeber or 3 member or multiple memeber value is same, that not problem. program can not show the error.
+
+# typedef
+
+Basic structure of typedef
+
+    typedef data_type new_name;
+
+**_Basic Example:_**
+
+```c
+#include <stdio.h>
+
+// create sum typedef
+typedef enum {false,true} bool;
+typedef char letter;
+typedef letter * string;
+typedef letter str[30];
+
+int main(void){
+    bool is_hotday = true;
+    string name = "Md Tazri";
+    str my_friend_name = "Focasa";
+
+    if(is_hotday == true){
+        printf("Now this is hot day.\n");
+    }else{
+        printf("This is not hot day.\n");
+    }
+
+    printf("My Name is : %s",name);
+    printf("\nMy Friend Name is : %s",my_friend_name);
+
+    printf("\n");
+    return 0;
+}
+```
+
+**_Result:_**
+
+```
+Now this is hot day.
+My Name is : Md Tazri
+My Friend Name is : Focasa
+
+```
+
+**_Example With Structure:_**
+
+```c
+#include <stdio.h>
+#include <string.h>
+
+// change type
+typedef char * string;
+typedef int let;
+
+// create structure
+typedef struct {
+    string name;
+    string subject;
+    let roll;
+} Person;
+
+int main(void){
+    // create person_one
+    Person person_one;
+    person_one.name = "Md Tazri";
+    person_one.subject = "Science";
+    person_one.roll = 30;
+
+    printf("\n===> Person Details <===\n");
+    printf("Name : %s\n",person_one.name);
+    printf("Subject : %s\n",person_one.subject);
+    printf("Roll : %d\n",person_one.roll);
+    printf("===> Finish <===");
+
+
+    printf("\n\n");
+    return 0;
+}
+```
+
+**_Result :_**
+
+```
+===> Person Details <===
+Name : Md Tazri
+Subject : Science
+Roll : 30
+===> Finish <===
+
 ```
