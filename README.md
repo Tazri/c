@@ -27,6 +27,8 @@ This is my simple and small documentation on c for me. I create this documentati
   - [union](#union)
   - [enumeration](#enumeration)
   - [typedef](#typedef)
+  - [bitfield](#bitfield)
+- [Data_File](#Data_File)
 
 # Starting-With-C
 
@@ -1533,4 +1535,82 @@ Subject : Science
 Roll : 30
 ===> Finish <===
 
+```
+
+# bitfield
+
+bitfield use to define structure or union member size.
+
+    struct Struct_name{
+        member_type memeber_name_1 : bit_size;
+        member_type memeber_name_2 : bit_size;
+        member_type memeber_name_3 : bit_size;
+        - - - - - - - - - - - - -
+        member_type memeber_name_n : bit_size;
+    }
+
+**_Example :_**
+
+```c
+#include <stdio.h>
+
+// structure
+typedef struct {
+    unsigned day : 5;
+    unsigned month : 4;
+    unsigned year : 7;
+} Date;
+
+// function prototype
+void print_date(Date);
+
+int main(void){
+    // create date
+    Date today;
+
+    today.day = 24;
+    today.month = 9;
+    today.year = 21;
+
+    print_date(today);
+
+    printf("\n\n");
+    return 0;
+}
+
+// print_date
+void print_date(Date date){
+    printf("\n===> The day is %d/%d/%d\n",date.day,date.month,date.year);
+}
+```
+
+**_Result :_**
+
+```
+
+===> The day is 24/9/21
+
+```
+
+# Data_File
+
+FILE is a one kind of structure which define in stdio.h header folder.
+
+### FILE structure
+
+**_let see file struture :_**
+
+```c
+typedef struct
+{
+    int level ;
+    unsigned flags;
+    char fd;
+    unsigned char hold;
+    int bsize;
+    unsigned char _FAR* buffer;
+    unsigned char _FAR* curp;
+    unsigned istemp;
+    short token;
+} FILE;
 ```
