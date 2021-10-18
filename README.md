@@ -37,6 +37,7 @@ This is my simple and small documentation on c for me. I create this documentati
     - [Update](#update)
     - [Delete](#delete)
     - [Random_Access](#random_Access)
+    - [Disk_Flush](#Disk_Flush)
 - [Command Line Arguments](#command_line_arguments)
 
 # Starting-With-C
@@ -2296,6 +2297,16 @@ int main(void){
     return 0;
 }
 ```
+
+## Disk_Flush
+
+In that case use fflush funciton. this function use for flush the disk. I mean write data buffer data inside file not for wait close the file.
+
+**_fflush structure_**
+
+    fflush(file_pointer);
+
+use this function after use file write function.
 
 # Command_Line_Arguments
 
