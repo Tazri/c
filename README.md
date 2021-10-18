@@ -29,6 +29,15 @@ This is my simple and small documentation on c for me. I create this documentati
   - [typedef](#typedef)
   - [bitfield](#bitfield)
 - [Data_File](#Data_File)
+  - [Open_and_Close_File](#Open_and_Close_File)
+  - [i/o_operation](#i/o_operation)
+  - [CRUD_Operation](#CRUD_Operation)
+    - [Create](#create)
+    - [Read](#read)
+    - [Update](#update)
+    - [Delete](#delete)
+    - [Random_Access](#random_Access)
+- [Command Line Arguments](#command_line_arguments)
 
 # Starting-With-C
 
@@ -1614,3 +1623,680 @@ typedef struct
     short token;
 } FILE;
 ```
+
+Then create FILE pointer.The use this pointer the read write the file. also create the file.
+
+### Open_and_Close_File
+
+There are two fuction to open and close the file.
+
+| function | work            |
+| -------- | --------------- |
+| fopen    | open the file   |
+| fclose   | close the file  |
+| remove   | delete the file |
+
+#### fopen
+
+This function use for open the file and it return FILE pointer
+
+**_fopen structure_**
+
+    fopen("file_path_with_extention","mode");
+
+There are 3 basic kind of mode. and 3 advance level mode which defend on compailer.
+
+| mode | work                                            |
+| ---- | ----------------------------------------------- |
+| "w"  | create file and write on file                   |
+| "r"  | read file. if file can not exist it return null |
+| "a"  | append in last of file.                         |
+| "w+" | write and read file                             |
+| "r+" | write and read file                             |
+| "a+" | append and read file                            |
+
+#### fclose
+
+This function use for close the file. If I can not close the file operating system automating close the file.
+
+**_fclose structure_**
+
+    fclose(file_pointer);
+
+#### remove
+
+This function use for delete file
+
+    remove("file_name");
+
+If file successfully delete it return 0 other then it return any positive or negitive number.
+
+## i/o_operation
+
+Here the functions which commonly use for i/o operatin on file.
+
+| write   | read   |
+| ------- | ------ |
+| putc    | getc   |
+| fputs   | fgets  |
+| fprintf | fscanf |
+| fwrite  | fread  |
+
+## CRUD_Operation
+
+CRUD meam Create, Read, Update and Delete.This operation mean create, delete, read, update and delete the file.
+
+## Create
+
+Basically fopen function use to create file. also "w" or "w+" mode use in that case.
+
+**_Example :_**
+
+```c
+#include <stdio.h>
+
+typedef char string[100];
+
+int main(void){
+    // create file pointer
+    FILE *file;
+    string file_name;
+
+    // get file to open
+    printf("\n>>>> Please Enter Your File Name : ");
+    gets(file_name);
+
+    // try to open the file in read mode
+    file = fopen(file_name,"r");
+
+    // if file dose not exist
+    if(file == NULL){
+        // print the messae is file dose not exist
+        printf("\n>>>> File Dose not exist");
+        printf("\n>>>> Do you want create file with this name ??");
+        printf("\n>>>> yse(1), no(0)\n");
+        printf("Command : ");
+
+        // get user agree or not
+        unsigned short isAgree;
+        scanf("%hu",&isAgree);
+
+        if(isAgree){
+            // create the file and send the message
+            file = fopen(file_name,"w");
+            printf("\n\n>>>> File is Created Successfully!!");
+            fclose(file);
+        }else{
+            printf("\n>>>> Program is Finished.");
+        }
+    }else{
+        // alert the user file is open.
+        printf(">>>>File is open.\nLoding......\n.....\n....\n...\n..\n.\n");
+
+        // close the file again.
+        fclose(file);
+    }
+
+    // extra line
+    printf("\n\n");
+    return 0;
+}
+```
+
+## write
+
+write functions use for something write inside the file.
+
+#### putc
+
+**_putc prototype_**
+
+    putc("character",file_pointer);
+
+**_Example :_**
+
+```c
+#include <stdio.h>
+
+// create costum keyword
+typedef char letter;
+typedef letter string[50];
+typedef FILE *Create_File;
+
+int main(void){
+    // create file and file property
+    Create_File user_file;
+    string file_name;
+
+    // print message for command
+    printf(">>>> Please Enter Your File Name With Extension : ");
+    gets(file_name);
+
+    // create the folder
+    user_file = fopen(file_name,"w");
+
+    // message to write something inside the file
+    printf(">>>> Print Your Text or Message Inside the file : \n\n");
+
+    // write something inside the file
+    letter c;
+    c = getchar();
+
+    while (c != EOF)
+    {
+        putc(c,user_file);
+        c = getchar();
+    }
+
+    printf(">>>> Write is complate <<<<");
+
+    // print program finish message
+    printf("--\n-\n>>>> Program is Finish <<<<\n");
+
+    return 0;
+}
+```
+
+#### fputs
+
+**_fputs prototype_**
+
+    fputs("line of string",file_pointer);
+
+**_Example :_**
+
+```c
+#include <stdio.h>
+
+int main(void){
+    // create text file
+    FILE * text_file = fopen("text.txt","w");
+    char sentence[30];
+
+    // write inside text
+    printf("Please Inside write text for text file : ");
+    gets(sentence);
+
+    // write text inside the text.txt file
+    fputs(sentence,text_file);
+
+    // close the file
+    fclose(text_file);
+
+    // print program finish message
+    printf("\n--\n-\n>>>> Program is finish <<<<\n");
+    return 0;
+}
+```
+
+#### fprintf
+
+**_fprintf prototype_**
+
+    fprintf(file_pointer,"strign with format specifier",.....variable for format specifier);
+
+**_Example :_**
+
+```c
+#include <stdio.h>
+
+int main(void){
+    // create file pointer
+    FILE * file;
+    char file_name[] = "text.txt";
+
+    file = fopen(file_name,"w");
+
+    // write something inside the file
+    fprintf(file,"This is %s and I am \n %d Year Old.","Md Tazri",18);
+
+    // close the file
+    fclose(file);
+
+    // print finish program message
+    printf("\n--\n-\n>>>> Finish The Program <<<<\n");
+}
+```
+
+#### fwrite
+
+fwrite function use for structure type data store in file.
+
+**_fwrite prototype_**
+
+    fwrite(
+            structure, /* structure */
+            size of structure, /* size of structure */
+            1, /* # of element equals to 1 */
+            file_pointer /* file pointer */
+        );
+
+**_Example :_**
+
+```c
+#include <stdio.h>
+
+// create custom data type
+typedef struct
+{
+   char name[10];
+   char addreas[30];
+   char phone[15];
+} Create_User;
+typedef char* string;
+
+int main(void){
+    // create user list
+    Create_User user_list[4] = {
+        "Md Tazri","Cumilla","032322234",
+        "Focasa","Unknow","203042321",
+        "Godzilla","Sea","00324230",
+        "Knight Peory","Sky","0302923934"
+    };
+
+    // create user date file
+    FILE * user_file;
+    string file_name = "user.dat";
+
+    // write to file
+    user_file = fopen(file_name,"w");
+    for(int i = 0;i < 4; i++){
+        fwrite(
+            &user_list[i], /* buffer pointer to user's i-th elm */
+            sizeof(user_list[i]), /* size of elements */
+            1, /* # of element equals to 1 */
+            user_file /* file pointer */
+        );
+    }
+
+    fclose(user_file);
+
+    // finish message
+    printf("\n--\n-\n>>>> Finish Program <<<<\n");
+    return 0;
+}
+```
+
+### read
+
+Read function use for read text from file.
+
+#### getc
+
+This function use for read single character in file.
+
+**_getc prototype_**
+
+    getc(file_pointer)
+
+**_Example :_**
+
+```c
+#include <stdio.h>
+
+// create costum keyword
+typedef char string[];
+typedef FILE * create_file;
+typedef char letter;
+
+int main(void){
+    // create file and open it
+    create_file text_file;
+    string file_name = "text.txt";
+
+    text_file = fopen(file_name,"r");
+
+    // create char variable
+    letter c;
+
+    while ( c != EOF)
+    {
+        printf("%c",c);
+        c = getc(text_file);
+    }
+
+
+    // extra linek escape
+    printf("\n>>>>> Finish The Program <<<<<\n\n");
+    return 0;
+}
+```
+
+#### fgets
+
+Read line of string in file.
+
+**_fgets prototype_**
+
+    fgets(char */char [],size_of_char,file_pointer);
+
+**_Example :_**
+
+```c
+#include <stdio.h>
+
+// create costum data type
+typedef char letter;
+typedef letter string[];
+
+int main(void){
+    // create file
+    FILE * text_file;
+    string file_name = "text.txt";
+
+    // open the file
+    text_file = fopen(file_name,"r");
+
+    // print everything inside the file
+    letter text[40];
+    fgets(text,30,text_file);
+
+    printf(">>>> Inside the text file : \n\n%s\n",text);
+
+    // printf finish message
+    printf("--\n-\n>>>> Programm is finish <<<<\n");
+    return 0;
+}
+```
+
+#### fscanf
+
+Read data like scanf functin line by line.
+
+**_fscanf prototype_**
+
+    fscanf(
+        file_pointer,
+        "string with format specifer",
+        ...variable)
+
+**_Example: _**
+
+```c
+#include <stdio.h>
+
+int main(void){
+    // create file
+    FILE * text_file;
+    char file_name[] = "text.txt";
+
+    text_file = fopen(file_name,"r");
+
+    // read the file
+    char name[30];
+    double number;
+    char grade;
+
+    fscanf(text_file,"%s %lf %c",name,&number,&grade);
+    printf("\nname : %s\nnumber : %0.2lf\ngrade : %c",name,number,grade);
+
+
+
+    // print end message
+    printf("\n--\n-\n>>>> Program is Finish <<<<\n");
+    return 0;
+}
+```
+
+#### fread
+
+This function use for read file which contains structure.
+
+**_fread prototype_**
+
+    fread(
+            &structure, /* structure */
+            sizeof(structure),
+            1, /* # of element equals to 1 */
+            file_pointer
+        );
+
+**_Example :_**
+
+```c
+#include <stdio.h>
+
+// create custom data type
+typedef struct
+{
+    char name[10];
+    char addreas[30];
+    char phone[15];
+} Create_User;
+typedef char * string;
+
+int main(void){
+    // create user
+    Create_User common_user;
+
+    // create file for read
+    FILE * user_dat_file;
+    string file_name = "user.dat";
+
+    user_dat_file = fopen(file_name,"r");
+
+    // read the file
+    for(int i = 0; i < 4; i++){
+        fread(
+            &common_user, /* buffer pointer */
+            sizeof(common_user), /* size of buffer */
+            1, /* # of element equals to 1 */
+            user_dat_file /* file pointer */
+        );
+
+        printf("\n>>>> Details %d <<<<\n",i);
+        printf("Name : %s\n",common_user.name);
+        printf("Addreas : %s\n",common_user.addreas);
+        printf("Phone : %s\n",common_user.phone);
+        printf(">>>> Finsh User %d <<<<\n",i);
+    }
+
+    // finish the program
+    printf("\n--\n-\n>>>> Finish The Program <<<<\n");
+    return 0;
+}
+```
+
+## Update
+
+update case we use "a" or "a+" mode in fopen.
+
+**_Example :_**
+
+```c
+#include <stdio.h>
+
+// function prototype
+void message(char []);
+
+int main(void){
+    // create file pointer
+    FILE * file = fopen("text.txt","a");
+
+    if(file == NULL){
+        message("File can't Open or Dose't Exist!");
+    }else{
+        fputs("\nThis line is appended\nbla bla bla",file);
+    }
+
+    return 0;
+}
+
+// message
+void message(char m[]){
+    printf("\n--\n-\n>>>> %s <<<<\n",m);
+}
+```
+
+## Delete
+
+use remove fuction for delete the file. It return 0 if file successfully delete other wise it's return any positive or negitive number.
+
+**_Example :_**
+
+```c
+#include <stdio.h>
+
+int main(){
+    char * delete_file_name = "d.t";
+
+    if(remove(delete_file_name) == 0){
+        printf("\n--\n-\n>>>> File Delete Successfully <<<<\a\n");
+    }else{
+        printf("\n--\n-\n>>>> File can not delete or file not exist <<<<\a\n");
+    }
+
+    return 0;
+}
+```
+
+## Random_Access
+
+Basically random access on file mean write and read file any where. 3 type of function commonly use in that case.
+
+| function name | function work                           |
+| ------------- | --------------------------------------- |
+| fseek         | set file pointer positiontion any where |
+| ftell         | return current file pointer position    |
+| rewind        | set file position in the begining       |
+
+### fseek
+
+This function use basically set file pointer position any where.
+
+**_fseek prototype_**
+
+    fseek(file_pointer,int index,int start);
+    // index of character;
+    // start mean starting point.
+    // three type of start in here.
+    // 0 - start
+    // 1 - center
+    // 2 - end
+
+**_int index_**
+
+use index of character. in here use L with integer. It first your code. like use 1L, 2L, 3L instead of use 1, 2, 3.
+
+**_int start_**
+
+In here can provide constant variable in start instead of number. 3 kind of constant variable.
+
+| constant | value | position |
+| -------- | ----- | -------- |
+| SEEK_SET | 0     | start    |
+| SEEK_CUR | 1     | center   |
+| SEEK_END | 2     | end      |
+
+**_Example :_**
+
+```c
+#include <stdio.h>
+
+// create custom data type
+typedef char string[];
+
+int main(void){
+    // create files
+    FILE * fp;
+    string file_name = "text.txt";
+
+    // open the file for write;
+    fp = fopen(file_name,"w");
+
+    // write something inside the file
+    string text = "HeLlo I am Md Tazri. Do You Know me";
+    fputs(text,fp);
+    fclose(fp);
+
+    // open the file for read the file
+    fp = fopen(file_name,"r");
+
+    fseek(fp,3L,0);
+    printf("chararcet = %c\n",getc(fp)); // l
+
+    fseek(fp,-2L,2);
+    printf("chararcet = %c\n",getc(fp)); // m
+
+    fseek(fp,-4L,2);
+    printf("chararcet = %c\n",getc(fp)); // w
+
+    fseek(fp,2L,1);
+    printf("chararcet = %c\n",getc(fp)); // w
+
+    /*
+        SEEK_SET 0 start position
+        SEEK_CUR 1 current position
+        SEEK_END 2 end position
+    */
+
+    fseek(fp,3L,SEEK_SET);
+    printf("chararcet = %c\n",getc(fp)); // l
+
+    fseek(fp,2L,SEEK_CUR);
+    printf("chararcet = %c\n",getc(fp)); // I
+
+    fseek(fp,-2L,SEEK_END);
+    printf("chararcet = %c\n",getc(fp)); // m
+
+    // finish program
+    printf("\n--\n-\n>>>> Finish Program <<<<\n");
+    return 0;
+}
+```
+
+### ftell
+
+It get FILE pointer and return current position as integer.
+
+### rewind
+
+This funciton set position in start on file pointer.It get FILE pointer as parameter.
+
+**_Example of ftell and rewind :_**
+
+```c
+#include <stdio.h>
+
+// custom data type
+typedef char letter;
+
+int main(void){
+    // create file pointer
+    FILE * file;
+    char file_name[30];
+
+    printf(">>>> Please Enter Your File Name : ");
+    gets(file_name);
+
+    // create the file
+    file = fopen(file_name,"w+");
+
+    // write inside the file
+    printf(">>>> Writing Started\n");
+    printf(">>>> If writing is finsih please press ctrl + d to end ...\n\n");
+    letter l;
+
+    while ((l = getchar()) != EOF)
+    {
+        putc(l,file);
+    }
+
+    // analysing the file
+    long long int total_character = ftell(file);
+    printf("\n\n>>>> Analysing <<<<\n");
+    printf("Total Character : %lld\n",total_character);
+    fseek(file,-1L,SEEK_END);
+    printf("The Last Character : %c\n",getc(file));
+    rewind(file);
+    printf("The First Character : %c\n",getc(file));
+
+    // finish program
+    printf("\n-\n--\n>>>> Finish Program <<<<\n");
+    return 0;
+}
+```
+
+# Command_Line_Arguments
+
+command line arguments mean pass the argument by terminal when process the executable file.
