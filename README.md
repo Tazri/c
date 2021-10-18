@@ -2300,3 +2300,173 @@ int main(void){
 # Command_Line_Arguments
 
 command line arguments mean pass the argument by terminal when process the executable file.
+
+In that case main function recive two parameter. first parameter number of arguments and secound parameter array of string which contain all arguments as string.
+
+```c
+int main(int argc, char* argv[]){
+    return 0;
+}
+```
+
+in here argc indicate number of argument and argv[] array contain all arguments as string. first string is file name.
+
+**_Example :_**
+comand_line
+
+```c
+#include <stdio.h>
+
+int main(int argc,char * agrv[]){
+    // print all command
+    printf(">>>> Command Details <<<<\n");
+    printf("Total Command : %d",argc);
+
+    for(int i = 0; i < argc; i++){
+        printf("\nCommand No %i : %s",argc,agrv[i]);
+    }
+
+    printf("\n>>>> Finish Print Command <<<<");
+
+    // finish the program here
+    printf("\n--\n-\n>>>> Finish Program <<<<\n");
+    return 0;
+}
+```
+
+**_Run this file like :_**
+
+    ./comand_line md tazri hello world <Enter>
+
+**_Output :_**
+
+```
+>>>> Command Details <<<<
+Total Command : 5
+Command No 5 : ./comand_line
+Command No 5 : md
+Command No 5 : tazri
+Command No 5 : hello
+Command No 5 : world
+>>>> Finish Print Command <<<<
+--
+-
+>>>> Finish Program <<<<
+```
+
+**_Example With beep file :_**
+
+```c
+#include <stdio.h>
+
+int main(int argc,char *argv[]){
+    unsigned int total_beep;
+
+    // check here is two argument
+    if(argc < 2){
+        // print finish program
+        printf("\n--\n-\n>>>> Please Enter the Number <<<<\n");
+        return 0;
+    }
+
+    total_beep = atoi(argv[1]);
+
+    // if total beep 0;
+    if(total_beep <= 0){
+        printf("\n--\n-\n>>>> Please Enter Number Greater Then 0 <<<<\n");
+        return 0;
+    }
+
+    // create beep sound
+    printf("total_beep : %d",total_beep);
+    for(int i = 0; i < total_beep; i++){
+        printf("\a");
+    }
+
+    // print finish program
+    printf("\n--\n-\n>>>> Finish Program <<<<\n");
+    return 0;
+}
+```
+
+**_Example with show_text file :_**
+
+```c
+#include <stdio.h>
+
+int main(int argc,char *argv[]){
+    // check user give the file name
+    if(argc < 2){
+        printf("\n--\n-\n>>>> Please Enter The file name <<<<\a\n");
+        return 0;
+    }
+
+    // Try to open the folder
+    FILE *file = fopen(argv[1],"r");
+
+    if(file == NULL){
+        printf("\n--\n-\n>>>> This File Maybe Cannot Exist or Open Error <<<<\a\n");
+        return 0;
+    }
+
+    // read the file and print everything inside the file
+
+    char line[255];
+
+    printf(">>>> Inside the file : \n\n");
+    while(fgets(line,sizeof(line),file))
+    {
+        printf("%s",line);
+    }
+
+
+    printf("\n\n--\n-\n>>>> Program is Successfully Finish <<<<\a\n");
+    return 0;
+}
+```
+
+**_Example with copy file_**
+
+```c
+#include <stdio.h>
+
+// function prototype
+void finish_program(char []);
+
+int main(int argc,char *argv[]){
+    // check your give 3 argument
+    if(argc < 3){
+        if(argc < 2){
+            finish_program("Please Enter Target File");
+            return 0;
+        }else{
+            finish_program("Please Enter Dist File");
+        }
+    }
+
+    // check input file exist
+    FILE * input_file = fopen(argv[2],"r");
+
+    if(input_file == NULL){
+        finish_program(">>>> Your Input File Dose't Exist or Open Error <<<<");
+        return 0;
+    }
+
+    // create output file
+    FILE * output_file = fopen(argv[1],"w");
+    char line[244];
+
+    while (fgets(line,sizeof(line),input_file))
+    {
+        fputs(line,output_file);
+    }
+
+    finish_program("Program Successfully Finish.");
+    return 0;
+}
+
+// finish_program
+void finish_program(char message[]){
+    printf("\n--\n-\n>>>> %s <<<<\n",message);
+}
+```
